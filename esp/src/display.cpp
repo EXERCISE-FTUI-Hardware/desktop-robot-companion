@@ -11,6 +11,8 @@ namespace Display {
 }
 
 void Display::initialize() {
+    Serial.println(F("Initializing display..."));
+    
     if (!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) {
         Serial.println(F("Display allocation failed!"));
         while (true);

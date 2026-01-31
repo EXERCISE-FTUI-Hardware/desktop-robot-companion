@@ -2,6 +2,7 @@
 
 #include "display.hpp"
 #include "animation_data.hpp"
+#include "wifi.hpp"
 
 static const int32_t SERIAL_SPEED = 115200;
 
@@ -16,6 +17,7 @@ void setup() {
     Serial.println(F("Hello, world!"));
 
     Display::initialize();
+    WiFi::initialize();
 
     Display::draw(Bitmaps::LOGO);
 }
