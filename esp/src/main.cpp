@@ -1,9 +1,8 @@
 #include <Arduino.h>
 
 #include "display.hpp"
-#include "animation_data.hpp"
-#include "wifi.hpp"
-#include "server.hpp"
+#include "animations.hpp"
+#include "website.hpp"
 
 static const int32_t SERIAL_SPEED = 115200;
 
@@ -18,10 +17,9 @@ void setup() {
     Serial.println(F("Hello, world!"));
 
     Display::initialize();
-    WiFi::initialize();
-    Server::initialize();
+    Website::initialize();
 
-    Display::draw(Bitmaps::LOGO);
+    Display::draw(Animations::LOGO);
 }
 
 void loop() {
@@ -29,5 +27,5 @@ void loop() {
     delay(500);
     digitalWrite(LED_BUILTIN, LOW);
     delay(500);
-    Server::update();
+    Website::update();
 }

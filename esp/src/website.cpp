@@ -1,4 +1,4 @@
-#include "server.hpp"
+#include "website.hpp"
 
 #include <WiFi.h>
 #include <AsyncTCP.h>
@@ -17,12 +17,20 @@ class CaptiveRequestHandler : public AsyncWebHandler {
     }
 };
 
-namespace Server {
+namespace Website {
     AsyncWebServer webServer(80);
     DNSServer dnsServer;
 }
 
-void Server::initialize() {
+void Website::initialize() {
+    Serial.println(F("Initializing WiFi AP..."));
+
+    WiFi.softAPConfig(ip, INADDR_NONE, INADDR_NONE);
+    WiFi.softAP(ssid);
+
+    Serial.print(F("AP address is "));
+    Serial.println(WiFi.softAPIP());
+
     dnsServer.start(53, "*", WiFi.softAPIP());
 
     webServer.addHandler(new CaptiveRequestHandler()).setFilter(ON_AP_FILTER);
@@ -30,6 +38,6 @@ void Server::initialize() {
     webServer.begin();
 }
 
-void Server::update() {
+void Website::update() {
     dnsServer.processNextRequest();
 }
