@@ -19,7 +19,7 @@ namespace TouchSensor {
 
     }
 
-        TouchState getState0() {
+    TouchState getState0() {
         return sensor0;
     }
     
@@ -69,6 +69,9 @@ namespace TouchSensor {
         else if(!isTouched0 && sensor0 == TOUCHED) {
             sensor0 = TAPPED;
         }
+        else if(!isTouched0 && sensor0 == HELD) {
+            sensor0 = IDLE;
+        }
 
         //Sensor 1
         if(isTouched1 && sensor1 == IDLE) {
@@ -82,6 +85,9 @@ namespace TouchSensor {
         }
         else if(!isTouched1 && sensor1 == TOUCHED) {
             sensor1 = TAPPED;
+        }
+        else if(!isTouched1 && sensor1 == HELD) {
+            sensor1 = IDLE;
         }
     }
 }

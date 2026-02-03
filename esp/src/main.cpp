@@ -2,7 +2,8 @@
 
 #include "display.hpp"
 #include "animations.hpp"
-#include "website.hpp"
+#include "website.hpp"  
+#include "touchsensor.hpp"
 
 static const int32_t SERIAL_SPEED = 115200;
 
@@ -20,6 +21,7 @@ void setup() {
     Website::initialize();
 
     Display::draw(Animations::LOGO);
+    TouchSensor::initialize();
 }
 
 void loop() {
@@ -27,5 +29,7 @@ void loop() {
     delay(500);
     digitalWrite(LED_BUILTIN, LOW);
     delay(500);
+
     Website::update();
+    TouchSensor::update();
 }
