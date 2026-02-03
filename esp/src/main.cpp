@@ -8,8 +8,6 @@
 static const int32_t SERIAL_SPEED = 115200;
 
 void setup() {
-    pinMode(LED_BUILTIN, OUTPUT);
-
     Serial.begin(SERIAL_SPEED);
 
     // Wait for Serial to start.
@@ -19,17 +17,22 @@ void setup() {
 
     Display::initialize();
     Website::initialize();
+    TouchSensor::initialize();
 
     Display::draw(Animations::LOGO);
-    TouchSensor::initialize();
 }
 
 void loop() {
-    digitalWrite(LED_BUILTIN, HIGH);
-    delay(500);
-    digitalWrite(LED_BUILTIN, LOW);
-    delay(500);
-
     Website::update();
     TouchSensor::update();
+
+    //display clock for a certain duration when idle
+    //screen goes blank and maybe esp sleeps after duration
+    //to conserve battery
+
+    if(TouchSensor::A_wasTapped()) {
+        //maybe play an animation
+        //display clock again for a duration
+    }
+
 }

@@ -6,88 +6,88 @@ namespace TouchSensor {
 
     //Hold time threshold and trackers
     static const unsigned long holdTimeThreshold = 500;
-    int lastTouchTime0 = 0;
-    int lastTouchTime1 = 0;
+    int lastTouchTimeA = 0;
+    int lastTouchTimeB = 0;
 
     //Reset states
-    TouchState sensor0 = IDLE;
-    TouchState sensor1 = IDLE;
+    TouchState sensorA = IDLE;
+    TouchState sensorB = IDLE;
 
     void initialize() {
-        pinMode(touchSensorPin0, INPUT);
-        pinMode(touchSensorPin1, INPUT);
+        pinMode(touchSensorAPin, INPUT);
+        pinMode(touchSensorBPin, INPUT);
 
     }
 
-    TouchState getState0() {
-        return sensor0;
+    TouchState A_getState() {
+        return sensorA;
     }
     
-    TouchState getState1() {
-        return sensor1;
+    TouchState B_getState() {
+        return sensorB;
     }
     
-    bool wasTapped0() {
-        if (sensor0 == TAPPED) {
-            sensor0 = IDLE;
+    bool A_wasTapped() {
+        if (sensorA == TAPPED) {
+            sensorA = IDLE;
             return true;
         }
         return false;
     }
     
-    bool wasTapped1() {
-        if (sensor1 == TAPPED) {
-            sensor1 = IDLE;
+    bool B_wasTapped() {
+        if (sensorB == TAPPED) {
+            sensorB = IDLE;
             return true;
         }
         return false;
     }
     
-    bool isHeld0() {
-        return sensor0 == HELD;
+    bool A_isHeld() {
+        return sensorA == HELD;
     }
     
-    bool isHeld1() {
-        return sensor1 == HELD;
+    bool B_isHeld() {
+        return sensorB == HELD;
     }
 
     void update() {
         //Boolean for if the sensor reading is over the threshold (touched)
-        bool isTouched0 = analogRead(touchSensorPin0) > touchThreshold;
-        bool isTouched1 = analogRead(touchSensorPin1) > touchThreshold;
+        bool isTouchedA = analogRead(touchSensorAPin) > touchThreshold;
+        bool isTouchedB = analogRead(touchSensorBPin) > touchThreshold;
 
-        //Sensor 0
-        if(isTouched0 && sensor0 == IDLE) {
-            sensor0 = TOUCHED;
-            lastTouchTime0 = millis();
+        //Sensor A
+        if(isTouchedA && sensorA == IDLE) {
+            sensorA = TOUCHED;
+            lastTouchTimeA = millis();
         }
-        else if(isTouched0 && sensor0 == TOUCHED) {
-            if(millis() - lastTouchTime0 > holdTimeThreshold) {
-                sensor0 = HELD;
+        else if(isTouchedA && sensorA == TOUCHED) {
+            if(millis() - lastTouchTimeA > holdTimeThreshold) {
+                sensorA = HELD;
             }
         }
-        else if(!isTouched0 && sensor0 == TOUCHED) {
-            sensor0 = TAPPED;
+        else if(!isTouchedA && sensorA == TOUCHED) {
+            sensorA = TAPPED;
         }
-        else if(!isTouched0 && sensor0 == HELD) {
-            sensor0 = IDLE;
+        else if(!isTouchedA && sensorA == HELD) {
+            sensorA = IDLE;
         }
 
-        //Sensor 1
-        if(isTouched1 && sensor1 == IDLE) {
-            sensor1 = TOUCHED;
-            lastTouchTime1 = millis();
+        //Sensor B
+        if(isTouchedB && sensorB == IDLE) {
+            sensorB = TOUCHED;
+            lastTouchTimeB = millis();
         }
-        else if(isTouched1 && sensor1 == TOUCHED) {
-            if(millis() - lastTouchTime1 > holdTimeThreshold) {
-                sensor1 = HELD;
+        else if(isTouchedB && sensorB == TOUCHED) {
+            if(millis() - lastTouchTimeB > holdTimeThreshold) {
+                sensorB = HELD;
             }
         }
-        else if(!isTouched1 && sensor1 == TOUCHED) {
-            sensor1 = TAPPED;
+        else if(!isTouchedB && sensorB == TOUCHED) {
+            sensorB = TAPPED;
         }
-        else if(!isTouched1 && sensor1 == HELD) {
-            sensor1 = IDLE;
+        else if(!isTouchedB && sensorB == HELD) {
+            sensorB = IDLE;
         }
     }
 }

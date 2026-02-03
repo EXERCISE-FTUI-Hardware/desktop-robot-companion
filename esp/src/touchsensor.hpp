@@ -5,8 +5,8 @@
 
 namespace TouchSensor {
     //Pin definitions
-    static const int touchSensorPin0 = 0;
-    static const int touchSensorPin1 = 1;
+    static const int touchSensorAPin = 0;
+    static const int touchSensorBPin = 1;
 
     //Sensor States
     enum TouchState{
@@ -20,16 +20,16 @@ namespace TouchSensor {
     void update();
     
     // Get current state of each sensor
-    TouchState getState0();
-    TouchState getState1();
+    TouchState A_getState();
+    TouchState B_getState();
     
     // Check if a tap just happened (returns true once per tap)
-    bool wasTapped0();
-    bool wasTapped1();
+    bool A_wasTapped();
+    bool B_wasTapped();
     
     // Check if currently being held
-    bool isHeld0();
-    bool isHeld1();
+    bool A_isHeld();
+    bool B_isHeld();
 }
 
 #endif
