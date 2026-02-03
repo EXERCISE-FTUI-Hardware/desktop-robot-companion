@@ -34,5 +34,14 @@ void loop() {
         //maybe play an animation
         //display clock again for a duration
     }
+    else(TouchSensor::A_isHeld) {
+        //animation genet
+    }
+    else if(TouchSensor::B_wasTapped()) {
+        //Turn on Alwas-On Display mode
+    }
+    else if(TouchSensor::B_isHeld()) {
+        //Enable wifi
+    }
 
 }
