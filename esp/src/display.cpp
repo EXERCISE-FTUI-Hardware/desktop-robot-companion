@@ -21,8 +21,12 @@ void Display::initialize() {
     display.clearDisplay();
 }
 
-void Display::draw(const uint8_t bitmap[DISPLAY_WIDTH * DISPLAY_HEIGHT]) {
+void Display::clear() {
     display.clearDisplay();
+    display.display();
+}
+
+void Display::draw(const uint8_t bitmap[DISPLAY_WIDTH * DISPLAY_HEIGHT]) {
     display.drawBitmap(0, 0, bitmap, DISPLAY_WIDTH, DISPLAY_HEIGHT, 1);
     display.display();
 }

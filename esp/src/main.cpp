@@ -34,7 +34,7 @@ void loop() {
         //maybe play an animation
         //display clock again for a duration
     }
-    else(TouchSensor::A_isHeld) {
+    else if (TouchSensor::A_isHeld()) {
         //animation genet
     }
     else if(TouchSensor::B_wasTapped()) {

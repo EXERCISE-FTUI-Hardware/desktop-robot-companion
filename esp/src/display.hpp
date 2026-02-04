@@ -8,6 +8,7 @@ namespace Display {
     static const uint8_t DISPLAY_HEIGHT = 64;
     
     void initialize();
+    void clear();
     void draw(const uint8_t bitmap[DISPLAY_WIDTH * DISPLAY_HEIGHT]);
 }
 
