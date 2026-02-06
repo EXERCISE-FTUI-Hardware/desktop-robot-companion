@@ -9,7 +9,7 @@ namespace Display {
     
     void initialize();
     void clear();
-    void draw(const uint8_t bitmap[DISPLAY_WIDTH * DISPLAY_HEIGHT]);
+    void draw(const uint8_t bitmap[DISPLAY_WIDTH * DISPLAY_HEIGHT / 8]);
 }
 
 #endif

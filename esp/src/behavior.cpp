@@ -14,10 +14,12 @@ namespace Behavior {
     };
 
     void LogoState::enter() {
+        Display::clear();
         Display::draw(Animations::LOGO);
         delay(1000);
+        Display::clear();
         
-        changeState(IdleState());
+        // changeState(IdleState());
     }  
 
     void IdleState::enter() {
