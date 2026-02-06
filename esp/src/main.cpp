@@ -4,8 +4,9 @@
 #include "animations.hpp"
 #include "website.hpp"  
 #include "touchsensor.hpp"
+#include "behavior.hpp"
 
-static const int32_t SERIAL_SPEED = 115200;
+static const int32_t SERIAL_SPEED = 9600;
 
 void setup() {
     Serial.begin(SERIAL_SPEED);
@@ -18,30 +19,12 @@ void setup() {
     Display::initialize();
     Website::initialize();
     TouchSensor::initialize();
-
-    Display::draw(Animations::LOGO);
 }
 
 void loop() {
     Website::update();
     TouchSensor::update();
+    Behavior::update();
 
-    //display clock for a certain duration when idle
-    //screen goes blank and maybe esp sleeps after duration
-    //to conserve battery
-
-    if(TouchSensor::A_wasTapped()) {
-        //maybe play an animation
-        //display clock again for a duration
-    }
-    else if (TouchSensor::A_isHeld()) {
-        //animation genet
-    }
-    else if(TouchSensor::B_wasTapped()) {
-        //Turn on Alwas-On Display mode
-    }
-    else if(TouchSensor::B_isHeld()) {
-        //Enable wifi
-    }
-
+    delay(50);
 }

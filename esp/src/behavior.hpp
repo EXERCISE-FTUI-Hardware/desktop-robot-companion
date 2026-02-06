@@ -4,16 +4,6 @@
 #include <Arduino.h>
 
 namespace Behavior {
-    class State {
-        protected:
-        State() {}
-
-        public:
-        void enter() {}
-        void update() {}
-        void exit() {}
-    };
-
     class Timer {
         private:
         unsigned long duration;
@@ -28,6 +18,44 @@ namespace Behavior {
         void pause();
         void resume();
         bool done();
+    };
+    
+    class State {
+        protected:
+        State() {}
+
+        public:
+        void enter() {}
+        void update() {}
+        void exit() {}
+    };
+
+    class LogoState : public State {
+        public:
+        void enter();
+    };
+
+    class IdleState : public State {
+        private:
+        static bool alwaysOn;
+        Timer *idleTimer;
+
+        public:
+        void enter();
+        void update();
+        void exit();
+    };
+
+    class SleepState : public State {
+        public:
+        void enter();
+        void update();
+    };
+
+    class WiFiState : public State {
+        public:
+        void enter();
+        void update();
     };
 
     // in ms

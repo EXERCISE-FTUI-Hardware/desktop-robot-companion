@@ -18,6 +18,8 @@ void Display::initialize() {
         while (true);
     }
 
+    Serial.println(F("Display is up."));
+
     display.clearDisplay();
 }
 
