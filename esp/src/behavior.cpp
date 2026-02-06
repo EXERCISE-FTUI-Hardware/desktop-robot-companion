@@ -5,96 +5,67 @@
 #include "animations.hpp"
 
 namespace Behavior {
-    State state = LogoState();
-    
+    static State state = LOGO;
+
+    static bool alwaysOn = false;
+
+    void changeState(State nextState);
+
+    void stateEnter(State state) {
+        using namespace Display;
+
+        switch (state) {
+            case LOGO:
+                Display::drawBitmap(Animations::LOGO);
+                break;
+            case IDLE:
+                break;
+            case SLEEP:
+                Display::clear();
+                break;
+            default:
+                break;
+        };
+    }
+
+    void stateUpdate(State state) {
+        switch (state) {
+            case IDLE:
+                if (TouchSensor::A_wasTapped()) {
+                    alwaysOn = !alwaysOn;
+                }
+                break;
+            case SLEEP:
+                if (TouchSensor::B_wasTapped()) {
+                    changeState(IDLE);
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+    void stateExit(State state) {
+        switch (state) {
+            case IDLE:
+                break;
+            default:
+                break;
+        }
+    }
+
     void changeState(State nextState) {
-        state.exit();
+        stateExit(state);
         state = nextState;
-        state.enter();
-    };
-
-    void LogoState::enter() {
-        Display::clear();
-        Display::draw(Animations::LOGO);
-        delay(1000);
-        Display::clear();
-        
-        // changeState(IdleState());
-    }  
-
-    void IdleState::enter() {
-        idleTimer = new Timer(IDLE_TIME_BEFORE_SLEEP);
-    }
-
-    void IdleState::update() {
-        if (TouchSensor::A_wasTapped()) {
-            alwaysOn = !alwaysOn;
-        }
-
-        if (alwaysOn) {
-            idleTimer->pause();
-        }
-        else {
-            idleTimer->resume();
-        }
-
-        if (idleTimer->done()) {
-            changeState(SleepState());
-        }
-    }
-
-    void IdleState::exit() {
-        delete idleTimer;
-    }
-
-    bool IdleState::alwaysOn = false;
-
-    void SleepState::enter() {
-        Display::clear();
-    }
-
-    void SleepState::update() {
-        if (TouchSensor::B_wasTapped()) {
-            changeState(IdleState());
-        }
-    }
-
-    void WiFiState::enter()  {
-        Display::draw(Animations::LOGO);
-    }
-
-    void WiFiState::update() {
-
-    }
-
-    bool Timer::done() {
-        return elapsed > duration;
-    }
-
-    void Timer::tick() {
-        if (isPaused) {
-            last = millis();
-            return;
-        }
-
-        unsigned long now = millis();
-        elapsed += now - last;
-        last = now;
-
-        if (done()) {
-            pause();
-        }
-    }
-
-    void Timer::pause() {
-        isPaused = true;
-    }
-
-    void Timer::resume() {
-        isPaused = false;
+        stateEnter(state);
     }
 }
 
+void Behavior::initialize() {
+    state = LOGO;
+    stateEnter(state);
+}
+
 void Behavior::update() {
-    state.update();
+    stateUpdate(state);
 }

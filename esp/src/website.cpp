@@ -40,7 +40,7 @@ void Website::initialize() {
     Serial.print(F("WiFi AP is up.\nAP address is "));
     Serial.println(WiFi.softAPIP());
 
-    Serial.println(F("Initializng DNS server..."));
+    Serial.println(F("Initializing DNS server..."));
     dnsServer.start(53, "*", apIp);
     Serial.println(F("DNS server is up."));
 

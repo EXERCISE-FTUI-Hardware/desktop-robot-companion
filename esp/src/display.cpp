@@ -6,7 +6,6 @@
 #include <Adafruit_SSD1306.h>
 
 namespace Display {
-    const int8_t DISPLAY_RESET_PIN = -1;
     Adafruit_SSD1306 display(DISPLAY_WIDTH, DISPLAY_HEIGHT, &Wire, DISPLAY_RESET_PIN);
 }
 
@@ -21,6 +20,7 @@ void Display::initialize() {
     Serial.println(F("Display is up."));
 
     display.clearDisplay();
+    display.display();
 }
 
 void Display::clear() {
@@ -28,7 +28,7 @@ void Display::clear() {
     display.display();
 }
 
-void Display::draw(const uint8_t bitmap[DISPLAY_WIDTH * DISPLAY_HEIGHT / 8]) {
+void Display::drawBitmap(const uint8_t bitmap[DISPLAY_WIDTH * DISPLAY_HEIGHT / 8]) {
     display.drawBitmap(0, 0, bitmap, DISPLAY_WIDTH, DISPLAY_HEIGHT, 1);
     display.display();
 }
