@@ -14,20 +14,20 @@ namespace TouchSensor {
     TouchState sensorB = IDLE;
 
     void initialize() {
-        pinMode(touchSensorAPin, INPUT);
-        pinMode(touchSensorBPin, INPUT);
+        pinMode(PIN_A, INPUT);
+        pinMode(PIN_B, INPUT);
 
     }
 
-    TouchState A_getState() {
+    TouchState aGetState() {
         return sensorA;
     }
     
-    TouchState B_getState() {
+    TouchState bGetState() {
         return sensorB;
     }
     
-    bool A_wasTapped() {
+    bool aWasTapped() {
         if (sensorA == TAPPED) {
             sensorA = IDLE;
             return true;
@@ -35,7 +35,7 @@ namespace TouchSensor {
         return false;
     }
     
-    bool B_wasTapped() {
+    bool bWasTapped() {
         if (sensorB == TAPPED) {
             sensorB = IDLE;
             return true;
@@ -43,18 +43,18 @@ namespace TouchSensor {
         return false;
     }
     
-    bool A_isHeld() {
+    bool aIsHeld() {
         return sensorA == HELD;
     }
     
-    bool B_isHeld() {
+    bool bIsHeld() {
         return sensorB == HELD;
     }
 
     void update() {
         //Boolean for if the sensor reading is over the threshold (touched)
-        bool isTouchedA = analogRead(touchSensorAPin) > touchThreshold;
-        bool isTouchedB = analogRead(touchSensorBPin) > touchThreshold;
+        bool isTouchedA = analogRead(PIN_A) > touchThreshold;
+        bool isTouchedB = analogRead(PIN_B) > touchThreshold;
 
         //Sensor A
         if(isTouchedA && sensorA == IDLE) {

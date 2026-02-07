@@ -3,12 +3,46 @@
 
 #include <Arduino.h>
 
+#include "timer.hpp"
+
 namespace Behavior {
-    enum State {
-        LOGO,
-        IDLE,
-        SLEEP,
-        WIFI
+    class State {
+        public:
+        virtual ~State() = default;
+        virtual void enter() {};
+        virtual void update() {};
+        virtual void exit() {};
+    };
+
+    class LogoState : public State {
+        public:
+        void enter() override;
+    };
+
+    class IdleState : public State {
+        private:
+        static bool alwaysOn;
+
+        Timer *idleTimer = nullptr;
+        Timer *touchTimer = nullptr;
+        
+        public:
+        IdleState();
+        ~IdleState() override;
+        void enter() override;
+        void update() override;
+    };
+
+    class SleepState : public State {
+        public:
+        void update() override;
+    };
+
+    class WiFiState : public State {
+        public:
+        void enter() override;
+        void update() override;
+        void exit() override;
     };
 
     // in ms

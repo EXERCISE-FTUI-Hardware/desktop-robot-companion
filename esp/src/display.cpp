@@ -3,10 +3,23 @@
 #include <SPI.h>
 #include <Wire.h>
 #include <Adafruit_GFX.h>
+
+#ifdef DISPLAY_SSD1306
 #include <Adafruit_SSD1306.h>
+#endif
+
+#ifdef DISPLAY_SH1106
+#include <Adafruit_SH1106.h>
+#endif
 
 namespace Display {
-    Adafruit_SSD1306 display(DISPLAY_WIDTH, DISPLAY_HEIGHT, &Wire, DISPLAY_RESET_PIN);
+    #ifdef DISPLAY_SSD1306
+        Adafruit_SSD1306 display(DISPLAY_WIDTH, DISPLAY_HEIGHT, &Wire, DISPLAY_RESET_PIN);
+    #endif
+
+    #ifdef DISPLAY_SH1106
+        Adafruit_SH1106 display(DISPLAY_WIDTH, DISPLAY_HEIGHT, &Wire, DISPLAY_RESET_PIN);
+    #endif
 }
 
 void Display::initialize() {

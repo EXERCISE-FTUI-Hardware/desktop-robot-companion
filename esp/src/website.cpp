@@ -28,6 +28,8 @@ namespace Website {
 namespace Website {
     AsyncWebServer webServer(80);
     DNSServer dnsServer;
+
+    bool paused = false;
 }
 
 void Website::initialize() {
@@ -41,6 +43,7 @@ void Website::initialize() {
     Serial.println(WiFi.softAPIP());
 
     Serial.println(F("Initializing DNS server..."));
+    dnsServer.setTTL(0);
     dnsServer.start(53, "*", apIp);
     Serial.println(F("DNS server is up."));
 
@@ -58,5 +61,15 @@ void Website::initialize() {
 }
 
 void Website::update() {
-    dnsServer.processNextRequest();
+    if (!paused) dnsServer.processNextRequest();
+}
+
+void Website::pause() {
+    WiFi.mode(WIFI_OFF);
+    paused = true;
+}
+
+void Website::resume() {
+    WiFi.mode(WIFI_AP);
+    paused = false;
 }

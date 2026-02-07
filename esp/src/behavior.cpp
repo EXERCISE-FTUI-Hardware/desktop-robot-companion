@@ -3,69 +3,101 @@
 #include "touchsensor.hpp"
 #include "display.hpp"
 #include "animations.hpp"
+#include "website.hpp"
+#include "timer.hpp"
 
 namespace Behavior {
-    static State state = LOGO;
+    State *state = nullptr;
 
-    static bool alwaysOn = false;
-
-    void changeState(State nextState);
-
-    void stateEnter(State state) {
-        using namespace Display;
-
-        switch (state) {
-            case LOGO:
-                Display::drawBitmap(Animations::LOGO);
-                break;
-            case IDLE:
-                break;
-            case SLEEP:
-                Display::clear();
-                break;
-            default:
-                break;
-        };
-    }
-
-    void stateUpdate(State state) {
-        switch (state) {
-            case IDLE:
-                if (TouchSensor::A_wasTapped()) {
-                    alwaysOn = !alwaysOn;
-                }
-                break;
-            case SLEEP:
-                if (TouchSensor::B_wasTapped()) {
-                    changeState(IDLE);
-                }
-                break;
-            default:
-                break;
+    void changeState(State *nextState) {
+        if (state != nullptr) {
+            state->exit();
+            delete state;
         }
-    }
 
-    void stateExit(State state) {
-        switch (state) {
-            case IDLE:
-                break;
-            default:
-                break;
-        }
-    }
-
-    void changeState(State nextState) {
-        stateExit(state);
         state = nextState;
-        stateEnter(state);
+        state->enter();
+    }
+}
+
+namespace Behavior {
+    void LogoState::enter() {
+        Display::drawBitmap(Animations::LOGO);
+        delay(2000);
+        Display::clear();
+        changeState(new IdleState());
+    }
+
+    bool IdleState::alwaysOn = false;
+
+    IdleState::IdleState() {
+        idleTimer = new Timer(10000);
+        touchTimer = new Timer(1000);
+    }
+
+    IdleState::~IdleState() {
+        delete idleTimer;
+        delete touchTimer;
+    }
+
+    void IdleState::enter() {
+        Display::drawBitmap(Animations::IDLE);
+        
+    }
+
+    void IdleState::update() {
+        if (TouchSensor::aWasTapped()) {
+            alwaysOn = !alwaysOn;
+        }
+        
+        if (touchTimer->isDone()) {
+            touchTimer->reset();
+            Display::clear();
+            Display::drawBitmap(Animations::IDLE);
+        }
+
+        if (TouchSensor::bWasTapped()) {
+            Display::clear();
+            Display::drawBitmap(Animations::TOUCHED);
+            touchTimer->start();
+        }
+
+        if (TouchSensor::aIsHeld()) {
+            changeState(new WiFiState());
+            return;
+        }
+
+        if (idleTimer->isDone()) {
+            changeState(new SleepState());
+            return;
+        }
+    }
+
+    void SleepState::update() {
+        if (TouchSensor::bWasTapped()) {
+            changeState(new IdleState());
+        }
+    }
+
+    void WiFiState::enter() {
+        Website::resume();
+    }
+
+    void WiFiState::update() {
+        if (TouchSensor::aIsHeld()) {
+            changeState(new IdleState());
+        }
+    }
+
+    void WiFiState::exit() {
+        Website::pause();
     }
 }
 
 void Behavior::initialize() {
-    state = LOGO;
-    stateEnter(state);
+    changeState(new LogoState());
 }
 
 void Behavior::update() {
-    stateUpdate(state);
+    if (state != nullptr) state->update();
 }

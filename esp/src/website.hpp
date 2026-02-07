@@ -10,6 +10,8 @@ namespace Website {
 
     void initialize();
     void update();
+    void pause();
+    void resume();
 }
 
 #endif
