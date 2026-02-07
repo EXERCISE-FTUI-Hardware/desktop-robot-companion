@@ -5,8 +5,8 @@
 
 namespace TouchSensor {
     //Pin definitions
-    static const int PIN_A = 0;
-    static const int PIN_B = 1;
+    static const int PIN_A = 32;
+    static const int PIN_B = 33;
 
     //Sensor States
     enum TouchState{

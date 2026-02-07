@@ -33,3 +33,8 @@ void Timer::update() {
 bool Timer::isDone() {
     return done;
 }
+
+void Timer::setDuration(uint32_t duration) {
+    reset();
+    this->duration = duration;
+}

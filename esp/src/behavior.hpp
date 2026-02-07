@@ -23,9 +23,12 @@ namespace Behavior {
         private:
         static bool alwaysOn;
         bool isTouched = false;
+        bool isBlinking = false;
 
-        Timer *idleTimer = nullptr;
+        Timer *sleepIntervalTimer = nullptr;
         Timer *touchTimer = nullptr;
+        Timer *blinkIntervalTimer = nullptr;
+        Timer *blinkTimer = nullptr;
 
         inline void draw();
 

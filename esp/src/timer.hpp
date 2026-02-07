@@ -21,6 +21,8 @@ class Timer {
     void resume();
     void update();
     bool isDone();
+
+    void setDuration(uint32_t duration);
 };
 
 #endif // TIMER_HPP

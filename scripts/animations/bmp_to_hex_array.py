@@ -11,7 +11,7 @@ def main():
     
     try:
         with Image.open(filename) as image:
-            image_bytes = image.tobytes();
+            image_bytes = image.tobytes()
             first = True
             
             print("{", end = "")

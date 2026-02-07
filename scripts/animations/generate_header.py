@@ -6,6 +6,9 @@ def main():
     first = True
     
     for filename in os.listdir("out"):
+        if (not filename.endswith(".txt")):
+            continue
+        
         with open("out/" + filename) as file:
             if (not first):
                 header_text += "\n\n"

@@ -33,16 +33,22 @@ namespace Behavior {
     bool IdleState::alwaysOn = false;
 
     IdleState::IdleState() {
-        idleTimer = new Timer(10000);
+        sleepIntervalTimer = new Timer(15000);
         touchTimer = new Timer(1000);
+        blinkIntervalTimer = new Timer(4000);
+        blinkTimer = new Timer(100);
     }
 
     IdleState::~IdleState() {
-        delete idleTimer;
+        delete sleepIntervalTimer;
         delete touchTimer;
+        delete blinkIntervalTimer;
+        delete blinkTimer;
     }
 
     void IdleState::draw() {
+        Display::clear();
+
         if (alwaysOn) {
             Display::drawBitmap(Animations::ALWAYS_ON);
         }
@@ -50,22 +56,45 @@ namespace Behavior {
         if (isTouched) {
             Display::drawBitmap(Animations::TOUCHED);
         }
+        else if (isBlinking) {
+            Display::drawBitmap(Animations::BLINK);
+        }
         else {
             Display::drawBitmap(Animations::IDLE);
         }
     }
 
     void IdleState::enter() {
-        idleTimer->start();
+        sleepIntervalTimer->start();
+        blinkIntervalTimer->start();
         draw();
     }
 
     void IdleState::update() {
-        idleTimer->update();
+        sleepIntervalTimer->update();
         touchTimer->update();
+        blinkIntervalTimer->update();
+        blinkTimer->update();
 
         if (TouchSensor::aWasTapped()) {
             alwaysOn = !alwaysOn;
+
+            if (alwaysOn) {
+                sleepIntervalTimer->reset();
+            }
+            else {
+                sleepIntervalTimer->start();
+            }
+
+            draw();
+        }
+
+        if (blinkTimer->isDone()) {
+            blinkTimer->reset();
+            blinkIntervalTimer->setDuration(5000 + random(-2000, 2000));
+            blinkIntervalTimer->start();
+            isBlinking = false;
+            Display::clear();
             draw();
         }
         
@@ -76,19 +105,29 @@ namespace Behavior {
             draw();
         }
 
+        if (!isTouched && blinkIntervalTimer->isDone()) {
+            blinkIntervalTimer->reset();
+            blinkTimer->start();
+            isBlinking = true;
+            Display::clear();
+            draw();
+        }
+
         if (TouchSensor::bWasTapped()) {
+            blinkTimer->reset();
             touchTimer->start();
             isTouched = true;
             Display::clear();
             draw();
         }
 
+
         if (TouchSensor::aIsHeld()) {
             changeState(new WiFiState());
             return;
         }
 
-        if (idleTimer->isDone()) {
+        if (sleepIntervalTimer->isDone()) {
             changeState(new SleepState());
             return;
         }
@@ -98,6 +137,7 @@ namespace Behavior {
 namespace Behavior {
     void SleepState::enter() {
         Display::clear();
+        Display::drawBitmap(Animations::SLEEP);
     }
 
     void SleepState::update() {
@@ -105,7 +145,6 @@ namespace Behavior {
             changeState(new IdleState());
         }
     }
-
 }
 
 namespace Behavior {
@@ -114,7 +153,7 @@ namespace Behavior {
     }
 
     void WiFiState::update() {
-        if (TouchSensor::aIsHeld()) {
+        if (TouchSensor::aWasTapped()) {
             changeState(new IdleState());
         }
     }

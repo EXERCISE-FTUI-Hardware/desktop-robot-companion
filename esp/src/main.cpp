@@ -6,7 +6,7 @@
 #include "touchsensor.hpp"
 #include "behavior.hpp"
 
-static const int32_t SERIAL_SPEED = 9600;
+static const int32_t SERIAL_SPEED = 115200;
 
 void setup() {
     Serial.begin(SERIAL_SPEED);
@@ -27,6 +27,4 @@ void loop() {
     Website::update();
     TouchSensor::update();
     Behavior::update();
-
-    delay(50);
 }
