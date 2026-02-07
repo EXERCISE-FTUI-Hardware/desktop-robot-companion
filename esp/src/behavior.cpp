@@ -27,7 +27,9 @@ namespace Behavior {
         Display::clear();
         changeState(new IdleState());
     }
+}
 
+namespace Behavior {
     bool IdleState::alwaysOn = false;
 
     IdleState::IdleState() {
@@ -40,26 +42,45 @@ namespace Behavior {
         delete touchTimer;
     }
 
+    void IdleState::draw() {
+        if (alwaysOn) {
+            Display::drawBitmap(Animations::ALWAYS_ON);
+        }
+
+        if (isTouched) {
+            Display::drawBitmap(Animations::TOUCHED);
+        }
+        else {
+            Display::drawBitmap(Animations::IDLE);
+        }
+    }
+
     void IdleState::enter() {
-        Display::drawBitmap(Animations::IDLE);
-        
+        idleTimer->start();
+        draw();
     }
 
     void IdleState::update() {
+        idleTimer->update();
+        touchTimer->update();
+
         if (TouchSensor::aWasTapped()) {
             alwaysOn = !alwaysOn;
+            draw();
         }
         
         if (touchTimer->isDone()) {
             touchTimer->reset();
+            isTouched = false;
             Display::clear();
-            Display::drawBitmap(Animations::IDLE);
+            draw();
         }
 
         if (TouchSensor::bWasTapped()) {
-            Display::clear();
-            Display::drawBitmap(Animations::TOUCHED);
             touchTimer->start();
+            isTouched = true;
+            Display::clear();
+            draw();
         }
 
         if (TouchSensor::aIsHeld()) {
@@ -72,6 +93,12 @@ namespace Behavior {
             return;
         }
     }
+}
+
+namespace Behavior {
+    void SleepState::enter() {
+        Display::clear();
+    }
 
     void SleepState::update() {
         if (TouchSensor::bWasTapped()) {
@@ -79,6 +106,9 @@ namespace Behavior {
         }
     }
 
+}
+
+namespace Behavior {
     void WiFiState::enter() {
         Website::resume();
     }

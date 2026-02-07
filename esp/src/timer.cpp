@@ -7,6 +7,7 @@ void Timer::start() {
 
 void Timer::reset() {
     done = false;
+    paused = true;
     elapsed = 0;
     last = millis();
 }

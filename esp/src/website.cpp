@@ -65,11 +65,15 @@ void Website::update() {
 }
 
 void Website::pause() {
+    WiFi.disconnect(true);
     WiFi.mode(WIFI_OFF);
     paused = true;
+    Serial.println("WiFi paused.");
 }
 
 void Website::resume() {
+    WiFi.softAP(ssid);
     WiFi.mode(WIFI_AP);
     paused = false;
+    Serial.println("WiFi resumed.");
 }

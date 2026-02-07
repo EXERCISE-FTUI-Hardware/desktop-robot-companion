@@ -22,10 +22,13 @@ namespace Behavior {
     class IdleState : public State {
         private:
         static bool alwaysOn;
+        bool isTouched = false;
 
         Timer *idleTimer = nullptr;
         Timer *touchTimer = nullptr;
-        
+
+        inline void draw();
+
         public:
         IdleState();
         ~IdleState() override;
@@ -35,6 +38,7 @@ namespace Behavior {
 
     class SleepState : public State {
         public:
+        void enter() override;
         void update() override;
     };
 

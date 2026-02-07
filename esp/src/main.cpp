@@ -18,6 +18,7 @@ void setup() {
 
     Display::initialize();
     Website::initialize();
+    Website::pause();
     TouchSensor::initialize();
     Behavior::initialize();
 }
